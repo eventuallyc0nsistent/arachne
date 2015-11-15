@@ -9,6 +9,11 @@ class Arachne(Flask):
 
     def __init__(self, import_name=__package__, 
                  settings='settings.py', **kwargs):
+        """Initialize the flask app with the settings variable. Load config
+        from the settings variable and test if the all the 
+        directories(for exports & logs) exists. Finally bind the endpoints for
+        the flask application to control the spiders
+        """
         super(Arachne, self).__init__(import_name, **kwargs)
         self.settings = settings
 

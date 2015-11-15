@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Python Flask Scrapy API &mdash; Arachne 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Arachne 0.1.0 documentation" href="#" />
+    <link rel="next" title="Configuration" href="config.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="python-flask-scrapy-api">
+<h1>Python Flask Scrapy API<a class="headerlink" href="#python-flask-scrapy-api" title="Permalink to this headline">¶</a></h1>
+<p>Arachne provides a wrapper around your scrapy spider to run them through a flask app. All you have to do is setup your <code class="docutils literal"><span class="pre">SPIDER_SETTINGS</span></code> in the settings file. You can view the source code on <a class="reference external" href="https://github.com/kirankoduru/arachne">github</a>.</p>
+<p>Arachne is powered by <a class="reference external" href="https://github.com/mitsuhiko/flask/">Flask</a>, <a class="reference external" href="https://twistedmatrix.com/trac/">Twisted</a> and the <a class="reference external" href="https://github.com/scrapy/scrapy/">Scrapy</a> package</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>You can install <strong>Arachne</strong> from pip</p>
+<blockquote>
+<div>pip install arachne</div></blockquote>
+</div>
+<div class="section" id="sample-settings">
+<h2>Sample settings<a class="headerlink" href="#sample-settings" title="Permalink to this headline">¶</a></h2>
+<p>This is sample settings file for spiders in your project. The settings file should be called <strong>settings.py</strong> for <strong>Arachne</strong> to find it and looks like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">SPIDER_SETTINGS</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>
+                <span class="s">&#39;endpoint&#39;</span><span class="p">:</span> <span class="s">&#39;dmoz&#39;</span><span class="p">,</span>
+                <span class="s">&#39;location&#39;</span><span class="p">:</span> <span class="s">&#39;spiders.DmozSpider&#39;</span><span class="p">,</span>
+                <span class="s">&#39;spider&#39;</span><span class="p">:</span> <span class="s">&#39;DmozSpider&#39;</span>
+        <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>It looks very similar to a flask app but since <strong>Scrapy</strong> depends on the python <strong>twisted</strong> package, we need to run our flask app with <strong>twisted</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">twisted.web.wsgi</span> <span class="kn">import</span> <span class="n">WSGIResource</span>
+<span class="kn">from</span> <span class="nn">twisted.web.server</span> <span class="kn">import</span> <span class="n">Site</span>
+<span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">reactor</span>
+<span class="kn">from</span> <span class="nn">arachne</span> <span class="kn">import</span> <span class="n">Arachne</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Arachne</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<span class="n">resource</span> <span class="o">=</span> <span class="n">WSGIResource</span><span class="p">(</span><span class="n">reactor</span><span class="p">,</span> <span class="n">reactor</span><span class="o">.</span><span class="n">getThreadPool</span><span class="p">(),</span> <span class="n">app</span><span class="p">)</span>
+<span class="n">site</span> <span class="o">=</span> <span class="n">Site</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span>
+<span class="n">reactor</span><span class="o">.</span><span class="n">listenTCP</span><span class="p">(</span><span class="mi">8080</span><span class="p">,</span> <span class="n">site</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+        <span class="n">reactor</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The API is running. Navigate to <a class="reference external" href="http://localhost:8080/spiders">http://localhost:8080/spiders</a> to get the list of spiders you can run</p>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">Arachne</a></h1>
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=kirankoduru&repo=arachne&type=watch&count=true&size=large"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Kiran Koduru.
+      
+      |
+      <a href="_sources/index.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/kirankoduru/arachne" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>
