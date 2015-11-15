@@ -117,7 +117,8 @@ html_theme_options = {
     'github_user': 'kirankoduru',
     'github_repo': 'arachne',
     'github_banner': True,
-    'show_powered_by': False
+    'show_powered_by': False,
+    'analytics_id': 'UA-13022600-7',
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
