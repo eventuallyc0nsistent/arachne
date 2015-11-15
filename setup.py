@@ -17,6 +17,6 @@ setup(
     url='https://github.com/kirankoduru/arachne',
     license='BSD',
     description='API for Scrapy spiders',
-    long_description=open('README.txt').read(),
+    long_description=open('README.rst').read(),
     install_requires=install_requires,
 )

@@ -16,9 +16,9 @@ class Arachne(Flask):
         self.validate_spider_settings()
 
         # create directories
-        self.mkdir_json()
-        self.mkdir_csv()
-        self.mkdir_logs()
+        self.check_dir_json()
+        self.check_dir_csv()
+        self.check_dir_logs()
 
         self._init_url_rules()
 
@@ -52,23 +52,23 @@ class Arachne(Flask):
         if os.environ.get(envvar):
             self.config.from_envvar(envvar)
 
-    def mkdir_json(self):
+    def check_dir_json(self):
         """Create json export directory on EXPORT_JSON True
         """
         if self.config['EXPORT_JSON']:
-            create_dir(self.config['EXPORT_PATH'], 'json/')
+            check_dir(self.config['EXPORT_PATH'], 'json/')
 
-    def mkdir_csv(self):
+    def check_dir_csv(self):
         """Create csv export directory on EXPORT_CSV True
         """
         if self.config['EXPORT_JSON']:
-            create_dir(self.config['EXPORT_PATH'], 'csv/')
+            check_dir(self.config['EXPORT_PATH'], 'csv/')
 
-    def mkdir_logs(self):
+    def check_dir_logs(self):
         """Create logs directory on LOGS True
         """
         if self.config['LOGS']:
-            create_dir(self.config['LOGS_PATH'], '')
+            check_dir(self.config['LOGS_PATH'], '')
 
     def validate_spider_settings(self):
         try:
@@ -82,14 +82,13 @@ class Arachne(Flask):
         """Attach the endpoints to run spiders and list the spiders
         that are available in the API
         """
-        self.add_url_rule('/run-spider/<spider_name>', 
-                          view_func=run_spider_endpoint)
+        self.add_url_rule('/run-spider/<spider_name>', view_func=run_spider_endpoint)
         self.add_url_rule('/spiders/', view_func=list_spiders_endpoint)
 
-def create_dir(path, folder):
-    """Create a directory in the current working directory
+def check_dir(path, folder):
+    """Check if directory exists else raise exception
     """ 
     cwd = os.getcwd()
     export_dir = cwd+'/'+path+folder
     if not os.path.exists(export_dir):
-        os.makedirs(export_dir)
+        raise SettingsException('Directory missing ', export_dir)

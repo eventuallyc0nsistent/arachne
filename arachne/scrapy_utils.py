@@ -30,7 +30,6 @@ def start_logger(debug):
     The logfiles will rotate after exceeding since of 1M and 100 count.
     """
     if debug:
-        print 'hello world'
         tlog.startLogging(sys.stdout)
     else:
         filename = datetime.now().strftime("%Y-%m-%d.scrapy.log")

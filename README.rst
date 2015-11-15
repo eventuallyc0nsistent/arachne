@@ -3,7 +3,7 @@ Arachne
 =======
 
 
-Arachne provides a wrapper around your scrapy ``Spider`` object to run them through a flask app. All you have to do is setup your ``SPIDER_SETTINGS`` in the settings file. The settings file will take care of your individual spider settings that you would like to setup for multiple scrapers.
+Arachne provides a wrapper around your scrapy ``Spider`` object to run them through a flask app. All you have to do is setup your ``SPIDER_SETTINGS`` in the settings file.
 
 
 Installation
