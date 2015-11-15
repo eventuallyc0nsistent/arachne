@@ -1,5 +1,12 @@
+import sys
+import logging
+from datetime import datetime
+from twisted.python import logfile, log as tlog
 from scrapy.crawler import Crawler
+from scrapy.utils.misc import load_object
 from scrapy.settings import Settings
+from scrapy.log import ScrapyFileLogObserver
+
 
 def create_crawler_object(spider_, settings_):
     """
@@ -17,6 +24,20 @@ def create_crawler_object(spider_, settings_):
     crwlr.crawl(spider_)
     return crwlr
 
+def start_logger(debug):
+    """
+    Logger will log for file if debug set to True else will print to cmdline.
+    The logfiles will rotate after exceeding since of 1M and 100 count.
+    """
+    if debug:
+        print 'hello world'
+        tlog.startLogging(sys.stdout)
+    else:
+        filename = datetime.now().strftime("%Y-%m-%d.scrapy.log")
+        logfile_ = logfile.LogFile(filename, 'logs/', maxRotatedFiles=100)
+        logger = ScrapyFileLogObserver(logfile_, logging.INFO)
+        tlog.addObserver(logger.emit)
+
 def get_spider_settings():
     """
     For the given spider_pipelines(dict) create a scrapy Settings object with
@@ -26,20 +47,11 @@ def get_spider_settings():
         Scrapy settings class instance
     """
     settings = Settings()
-    pipelines = {
-        'helpers.pipelines.ExportCSV': 100,
-        'helpers.pipelines.ExportJSON': 200,
-    }
-    extensions = {
-        'helpers.extensions.StatsCollectorExt': 200,
-    }
-    settings.set("TELNETCONSOLE_PORT", None)
-    settings.set("DOWNLOAD_TIMEOUT", 800)
-    settings.set("ITEM_PIPELINES", pipelines)
-    settings.set("EXTENSIONS", extensions)
-    settings.set("USER_AGENT", "Kiran Koduru (+http://github.com/kirankoduru)")
-
     return settings
 
-def start_crawler(endpoint):
-    
+def start_crawler(spider_loc, debug):
+    start_logger(debug)
+    spider = load_object(spider_loc)
+    settings = get_spider_settings()
+    crawler = create_crawler_object(spider(), settings)
+    crawler.start()

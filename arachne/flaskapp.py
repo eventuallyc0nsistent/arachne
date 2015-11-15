@@ -1,14 +1,14 @@
 import os
 import sys
 from flask import Flask
+
 from arachne.exceptions import SettingsException
-from arachne.endpoints import spider_endpoint
+from arachne.endpoints import list_spiders_endpoint, run_spider_endpoint
 
 class Arachne(Flask):
 
     def __init__(self, import_name=__package__, 
                  settings='settings.py', **kwargs):
-
         super(Arachne, self).__init__(import_name, **kwargs)
         self.settings = settings
 
@@ -56,19 +56,19 @@ class Arachne(Flask):
         """Create json export directory on EXPORT_JSON True
         """
         if self.config['EXPORT_JSON']:
-            self.create_dir(self.config['EXPORT_PATH'], 'json/')
+            create_dir(self.config['EXPORT_PATH'], 'json/')
 
     def mkdir_csv(self):
         """Create csv export directory on EXPORT_CSV True
         """
         if self.config['EXPORT_JSON']:
-            self.create_dir(self.config['EXPORT_PATH'], 'csv/')
+            create_dir(self.config['EXPORT_PATH'], 'csv/')
 
     def mkdir_logs(self):
         """Create logs directory on LOGS True
         """
         if self.config['LOGS']:
-            self.create_dir(self.config['LOGS_PATH'], '')
+            create_dir(self.config['LOGS_PATH'], '')
 
     def validate_spider_settings(self):
         try:
@@ -79,12 +79,17 @@ class Arachne(Flask):
             raise SettingsException('SPIDER_SETTINGS must be a dict')
 
     def _init_url_rules(self):
-        self.add_url_rule('/spiders', 'spiders', spider_endpoint)
+        """Attach the endpoints to run spiders and list the spiders
+        that are available in the API
+        """
+        self.add_url_rule('/run-spider/<spider_name>', 
+                          view_func=run_spider_endpoint)
+        self.add_url_rule('/spiders/', view_func=list_spiders_endpoint)
 
-    def create_dir(self, path, folder):
-        """Create a directory in the current working directory
-        """ 
-        cwd = os.getcwd()
-        export_dir = cwd+'/'+path+folder
-        if not os.path.exists(export_dir):
-            os.makedirs(export_dir)
+def create_dir(path, folder):
+    """Create a directory in the current working directory
+    """ 
+    cwd = os.getcwd()
+    export_dir = cwd+'/'+path+folder
+    if not os.path.exists(export_dir):
+        os.makedirs(export_dir)
