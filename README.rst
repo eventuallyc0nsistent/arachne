@@ -10,7 +10,7 @@ Installation
 ============
 You can install **Arachne** from pip 
 
-	pip install arachne
+	pip install -i https://pypi.python.org/pypi Arachne
 
 
 Sample settings
