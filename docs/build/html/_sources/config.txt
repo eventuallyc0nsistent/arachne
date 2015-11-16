@@ -3,4 +3,4 @@
 Configuration
 =============
 
-This is the configuration page with using Arachne. 
+This is the configuration with using Arachne. 

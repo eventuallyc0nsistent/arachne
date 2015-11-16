@@ -1,0 +1,15 @@
+.. _spider_settings:
+
+Spider Settings
+===============
+
+You can customize each spider with by modifying the *SPIDER_SETTINGS* variable in *settings.py* file. For the initial release you can set the following settings for each spider:
+
+=================== ==========================================================
+Field               Description
+=================== ==========================================================
+``endpoint``        The URL endpoint that you would like to associate with the spider.
+``location``        The spider location is usally the module location to the spider in a dot notation. Consider that your *DmozSpider* is in the *spiders* directory, then the ``location`` variable will be set to **spiders.DmozSpider**.
+``spider``          The ``class`` name of the *Spider*.
+``scrapy_settings`` [Coming Soon] This will let you override the individual settings for each spider in the scrapers
+=================== ==========================================================

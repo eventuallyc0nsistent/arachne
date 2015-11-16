@@ -24,7 +24,8 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="Arachne 0.1.0 documentation" href="index.html" />
-    <link rel="prev" title="Configuration" href="config.html" />
+    <link rel="next" title="Spider Settings" href="settings.html" />
+    <link rel="prev" title="Python Flask Scrapy API" href="index.html" />
    
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -39,7 +40,95 @@
             
   <div class="section" id="quickstart">
 <span id="id1"></span><h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
-<p>This is the quickstart page.</p>
+<p>To be able to run your spiders from the Flask API you will need to create a <em>settings.py</em> file in your projects root directory.</p>
+<div class="section" id="create-flask-app">
+<h2>Create flask app<a class="headerlink" href="#create-flask-app" title="Permalink to this headline">¶</a></h2>
+<p>Create a file called <em>app.py</em> with the following code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">twisted.web.wsgi</span> <span class="kn">import</span> <span class="n">WSGIResource</span>
+<span class="kn">from</span> <span class="nn">twisted.web.server</span> <span class="kn">import</span> <span class="n">Site</span>
+<span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">reactor</span>
+<span class="kn">from</span> <span class="nn">arachne</span> <span class="kn">import</span> <span class="n">Arachne</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Arachne</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<span class="n">resource</span> <span class="o">=</span> <span class="n">WSGIResource</span><span class="p">(</span><span class="n">reactor</span><span class="p">,</span> <span class="n">reactor</span><span class="o">.</span><span class="n">getThreadPool</span><span class="p">(),</span> <span class="n">app</span><span class="p">)</span>
+<span class="n">site</span> <span class="o">=</span> <span class="n">Site</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span>
+<span class="n">reactor</span><span class="o">.</span><span class="n">listenTCP</span><span class="p">(</span><span class="mi">8080</span><span class="p">,</span> <span class="n">site</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+        <span class="n">reactor</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="spider">
+<h2>Spider<a class="headerlink" href="#spider" title="Permalink to this headline">¶</a></h2>
+<p>Lets say we have a spider that crawls <a class="reference external" href="http://dmoz.org">http://dmoz.org</a> that looks like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">scrapy</span>
+
+<span class="k">class</span> <span class="nc">DmozItem</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Item object to store title, link, description&quot;&quot;&quot;</span>
+
+        <span class="n">title</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+        <span class="n">desc</span> <span class="o">=</span> <span class="n">scrapy</span><span class="o">.</span><span class="n">Field</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">DmozSpider</span><span class="p">(</span><span class="n">scrapy</span><span class="o">.</span><span class="n">Spider</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Spider to crawl Python books and resources on dmoz.org</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;dmoz&quot;</span>
+        <span class="n">allowed_domains</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;dmoz.org&quot;</span><span class="p">]</span>
+        <span class="n">start_urls</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s">&quot;http://www.dmoz.org/Computers/Programming/Languages/Python/Books/&quot;</span><span class="p">,</span>
+                <span class="s">&quot;http://www.dmoz.org/Computers/Programming/Languages/Python/Resources/&quot;</span>
+        <span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">sel</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">&#39;//ul/li&#39;</span><span class="p">):</span>
+                        <span class="n">item</span> <span class="o">=</span> <span class="n">DmozItem</span><span class="p">()</span>
+                        <span class="n">item</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sel</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">&#39;a/text()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+                        <span class="n">item</span><span class="p">[</span><span class="s">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sel</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">&#39;a/@href&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+                        <span class="n">item</span><span class="p">[</span><span class="s">&#39;desc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sel</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">&#39;text()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">()</span>
+                        <span class="k">yield</span> <span class="n">item</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="settings">
+<h2>Settings<a class="headerlink" href="#settings" title="Permalink to this headline">¶</a></h2>
+<p>You need to specify the endpoint you would like to run your spider at so your <em>settings.py</em> file. To read more about the <em>SPIDER_SETTINGS</em> variables goto this <a class="reference external" href="settings.html">link</a>. It should look like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">SPIDER_SETTINGS</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>
+                <span class="s">&#39;endpoint&#39;</span><span class="p">:</span> <span class="s">&#39;dmoz&#39;</span><span class="p">,</span>
+                <span class="s">&#39;location&#39;</span><span class="p">:</span> <span class="s">&#39;spiders.DmozSpider&#39;</span><span class="p">,</span>
+                <span class="s">&#39;spider&#39;</span><span class="p">:</span> <span class="s">&#39;DmozSpider&#39;</span>
+        <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="directory-structure">
+<h2>Directory Structure<a class="headerlink" href="#directory-structure" title="Permalink to this headline">¶</a></h2>
+<p>So finally this is what your directory should look like:</p>
+<div class="highlight-python"><div class="highlight"><pre>.
+├── app.py
+├── settings.py
+└── spiders
+        ├── DmozSpider.py
+        └── __init__.py
+</pre></div>
+</div>
+<p>Now, run your application with the python command:</p>
+<div class="highlight-python"><div class="highlight"><pre>python app.py
+</pre></div>
+</div>
+<p>Navigate to the URL <a class="reference external" href="http://localhost:8080/spiders/">http://localhost:8080/spiders/</a> to get a list of the spiders in your project. For the above example you should receive a response as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+        <span class="n">spiders</span><span class="p">:[</span><span class="s">&#39;dmoz&#39;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>To run the <em>dmoz</em> spider you can navigate to the URL <a class="reference external" href="http://localhost:8080/run-spider/dmoz">http://localhost:8080/run-spider/dmoz</a>.</p>
+</div>
 </div>
 
 
@@ -62,8 +151,14 @@
 
 <h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Quickstart</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#create-flask-app">Create flask app</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spider">Spider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#settings">Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#directory-structure">Directory Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html">Spider Settings</a></li>
 </ul>
 
 
@@ -98,6 +193,22 @@
     </a>
     
 
+    
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-13022600-7']);
+      _gaq.push(['_setDomainName', 'none']);
+      _gaq.push(['_setAllowLinker', true]);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
     
   </body>
 </html>

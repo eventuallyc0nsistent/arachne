@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="Arachne 0.1.0 documentation" href="#" />
-    <link rel="next" title="Configuration" href="config.html" />
+    <link rel="next" title="Quickstart" href="quickstart.html" />
    
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -43,42 +43,13 @@
 <p>Arachne is powered by <a class="reference external" href="https://github.com/mitsuhiko/flask/">Flask</a>, <a class="reference external" href="https://twistedmatrix.com/trac/">Twisted</a> and the <a class="reference external" href="https://github.com/scrapy/scrapy/">Scrapy</a> package</p>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>You can install <strong>Arachne</strong> from pip</p>
+<p>To install Arachne from pip use the command</p>
 <blockquote>
 <div>pip install arachne</div></blockquote>
 </div>
-<div class="section" id="sample-settings">
-<h2>Sample settings<a class="headerlink" href="#sample-settings" title="Permalink to this headline">¶</a></h2>
-<p>This is sample settings file for spiders in your project. The settings file should be called <strong>settings.py</strong> for <strong>Arachne</strong> to find it and looks like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">SPIDER_SETTINGS</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">{</span>
-                <span class="s">&#39;endpoint&#39;</span><span class="p">:</span> <span class="s">&#39;dmoz&#39;</span><span class="p">,</span>
-                <span class="s">&#39;location&#39;</span><span class="p">:</span> <span class="s">&#39;spiders.DmozSpider&#39;</span><span class="p">,</span>
-                <span class="s">&#39;spider&#39;</span><span class="p">:</span> <span class="s">&#39;DmozSpider&#39;</span>
-        <span class="p">}</span>
-<span class="p">]</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
-<p>It looks very similar to a flask app but since <strong>Scrapy</strong> depends on the python <strong>twisted</strong> package, we need to run our flask app with <strong>twisted</strong>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">twisted.web.wsgi</span> <span class="kn">import</span> <span class="n">WSGIResource</span>
-<span class="kn">from</span> <span class="nn">twisted.web.server</span> <span class="kn">import</span> <span class="n">Site</span>
-<span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">reactor</span>
-<span class="kn">from</span> <span class="nn">arachne</span> <span class="kn">import</span> <span class="n">Arachne</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">Arachne</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
-
-<span class="n">resource</span> <span class="o">=</span> <span class="n">WSGIResource</span><span class="p">(</span><span class="n">reactor</span><span class="p">,</span> <span class="n">reactor</span><span class="o">.</span><span class="n">getThreadPool</span><span class="p">(),</span> <span class="n">app</span><span class="p">)</span>
-<span class="n">site</span> <span class="o">=</span> <span class="n">Site</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span>
-<span class="n">reactor</span><span class="o">.</span><span class="n">listenTCP</span><span class="p">(</span><span class="mi">8080</span><span class="p">,</span> <span class="n">site</span><span class="p">)</span>
-
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
-        <span class="n">reactor</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>The API is running. Navigate to <a class="reference external" href="http://localhost:8080/spiders">http://localhost:8080/spiders</a> to get the list of spiders you can run</p>
+<div class="section" id="getting-started">
+<h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<p>Learn more about getting start quickly in the <a class="reference external" href="quickstart.html">guide</a>.</p>
 <div class="toctree-wrapper compound">
 </div>
 </div>
@@ -104,8 +75,8 @@
 
 <h3>Navigation</h3>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="config.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html">Settings</a></li>
 </ul>
 
 
@@ -140,6 +111,22 @@
     </a>
     
 
+    
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-13022600-7']);
+      _gaq.push(['_setDomainName', 'none']);
+      _gaq.push(['_setAllowLinker', true]);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
     
   </body>
 </html>
