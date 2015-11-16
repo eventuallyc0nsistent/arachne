@@ -79,7 +79,7 @@ So finally this is what your directory should look like::
 	├── settings.py
 	└── spiders
 		├── DmozSpider.py
-		└── __init__.py
+		└── __init__.py # don't forget the __init__.py file
 
 Now, run your application with the python command::
 
