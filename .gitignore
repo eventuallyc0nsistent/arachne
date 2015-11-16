@@ -2,3 +2,6 @@
 .editorconfig
 twistd.pid
 venv/
+dist/
+build/
+*.egg-info/

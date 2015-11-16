@@ -66,7 +66,7 @@ class Arachne(Flask):
     def check_dir_csv(self):
         """Create csv export directory on EXPORT_CSV True
         """
-        if self.config['EXPORT_JSON']:
+        if self.config['EXPORT_CSV']:
             check_dir(self.config['EXPORT_PATH'], 'csv/')
 
     def check_dir_logs(self):

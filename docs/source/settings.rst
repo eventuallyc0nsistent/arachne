@@ -17,7 +17,7 @@ Field           Description
 ``LOGS_PATH``   Set the logs path for your spiders. Default set to ``logs/`` directory. Each day is logged in the datetime file ``%Y-%m-%d.scrapy.log``
 ``EXPORT_JSON`` Turn *json* exporting for all spiders ON(``True``) or OFF(``False``). Default set to ``False``
 ``EXPORT_CSV``  Turn *csv* exporting for all spiders ON(``True``) or OFF(``False``). Default set to ``False``
-``LOGS``        Turn ON(``True``) or off(``False``) logging. Default set to ``False``
+``LOGS``        Turn ON(``True``) or off(``False``) HTTP logging for your flask app. Default set to ``False``
 =============== ===========
 
 Spider settings

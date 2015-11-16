@@ -16,6 +16,6 @@ def run_spider_endpoint(spider_name):
     for item in app.config['SPIDER_SETTINGS']:
         if spider_name in item['endpoint']:
             spider_loc = '%s.%s' % (item['location'], item['spider'])
-            start_crawler(spider_loc, app.config['DEBUG'])
+            start_crawler(spider_loc, app.config)
             return jsonify(status='<%s> running'% spider_name)
     return abort(404)

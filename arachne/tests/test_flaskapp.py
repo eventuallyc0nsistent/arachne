@@ -6,4 +6,3 @@ class TestFlaskApp(TestCase):
     def __init__(self):
         self.app = Arachne(__name__)
 
-    def test_
