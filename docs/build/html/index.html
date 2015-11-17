@@ -41,6 +41,10 @@
 <h1>Python Flask Scrapy API<a class="headerlink" href="#python-flask-scrapy-api" title="Permalink to this headline">¶</a></h1>
 <p>Arachne provides a wrapper around your scrapy spider to run them through a flask app. All you have to do is setup your <code class="docutils literal"><span class="pre">SPIDER_SETTINGS</span></code> in the settings file. You can view the source code on <a class="reference external" href="https://github.com/kirankoduru/arachne">github</a>.</p>
 <p>Arachne is powered by <a class="reference external" href="https://github.com/mitsuhiko/flask/">Flask</a>, <a class="reference external" href="https://twistedmatrix.com/trac/">Twisted</a> and the <a class="reference external" href="https://github.com/scrapy/scrapy/">Scrapy</a> package</p>
+<div class="section" id="why-not-scrapyd">
+<h2>Why not scrapyd?<a class="headerlink" href="#why-not-scrapyd" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="http://blog.codinghorror.com/the-best-code-is-no-code-at-all/">The best code is no code at all</a>, I have tried to write as little code as possible to maintain my scrapy projects but when I started off using scrapy daemon, it was incredibly harder to maintain. My project grew to over 100 spiders and then I started to break my projects into smaller tiny pieces when I got to the bare roots of it then <em>lo and behold</em>, this project is its creation.</p>
+</div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <p>To install Arachne from pip use the command</p>
@@ -93,7 +97,12 @@
     Enter search terms or a module, class or function name.
     </p>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script type="text/javascript">$('#searchbox').show(0);</script><h3>Useful Links</h3>
+<ul>
+  <li><a href="http://github.com/kirankoduru/arachne/issues">Issue Tracker</a></li>
+  <li><a href="https://github.com/kirankoduru/arachne/blob/master/CHANGES.md">Changelog</a></li>
+  <li><a href="https://tinyletter.com/kirankoduru">Subscribe to Newsletter</a></li>
+</ul>
         </div>
       </div>
       <div class="clearer"></div>

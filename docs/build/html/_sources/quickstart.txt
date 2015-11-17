@@ -3,7 +3,7 @@
 Quickstart
 ==========
 
-To be able to run your spiders from the Flask API you will need to create a *settings.py* file in your projects root directory.
+To be able to run your spiders from the Flask API need to create the following files
 
 
 Create flask app
@@ -60,7 +60,7 @@ Lets say we have a spider that crawls http://dmoz.org that looks like::
 
 Settings
 --------
-You need to specify the endpoint you would like to run your spider at so your *settings.py* file. To read more about the *SPIDER_SETTINGS* variables goto this link_. It should look like::
+You need to specify the endpoint you would like to run your spider at in your *settings.py* file. To read more about the *SPIDER_SETTINGS* variables goto this link_. It should look like::
 
 	SPIDER_SETTINGS = [
 		{

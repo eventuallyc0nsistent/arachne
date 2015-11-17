@@ -164,6 +164,7 @@ html_sidebars = {
        'about.html',
        'navigation.html',
        'searchbox.html',
+       'alabaster/links.html',
    ]
 }
 # Additional templates that should be rendered to pages, maps page names to
