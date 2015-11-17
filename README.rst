@@ -3,6 +3,7 @@ Arachne
 =======
 .. image:: https://travis-ci.org/kirankoduru/arachne.svg
     :target: https://travis-ci.org/kirankoduru/arachne
+.. image:: https://coveralls.io/repos/kirankoduru/arachne/badge.svg?branch=master&service=github :target: https://coveralls.io/github/kirankoduru/arachne?branch=master
     
 Arachne provides a wrapper around your scrapy ``Spider`` object to run them through a flask app. All you have to do is setup your ``SPIDER_SETTINGS`` in the settings file.
 
