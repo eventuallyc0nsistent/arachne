@@ -1,5 +1,6 @@
 *.pyc
 .editorconfig
+.coverage
 twistd.pid
 venv/
 dist/
