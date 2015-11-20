@@ -13,7 +13,7 @@ Installation
 ------------
 To install Arachne from pip use the command
 
-	pip install -i https://pypi.python.org/pypi Arachne 
+	pip install -i https://pypi.python.org/pypi/Arachne 
 
 Getting started
 ---------------
