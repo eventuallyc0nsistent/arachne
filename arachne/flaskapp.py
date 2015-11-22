@@ -21,9 +21,13 @@ class Arachne(Flask):
         self.validate_spider_settings()
 
         # create directories
-        self.check_dir_json()
-        self.check_dir_csv()
-        self.check_dir_logs()
+        self.check_dir(self.config['EXPORT_JSON'], 
+                       self.config['EXPORT_PATH'],
+                       'json/')
+        self.check_dir(self.config['EXPORT_CSV'],
+                       self.config['EXPORT_PATH'],
+                       'json/')
+        self.check_dir(self.config['LOGS'], self.config['LOGS_PATH'], '')
 
         self._init_url_rules()
 
@@ -57,23 +61,15 @@ class Arachne(Flask):
         if os.environ.get(envvar):
             self.config.from_envvar(envvar)
 
-    def check_dir_json(self):
-        """Create json export directory on EXPORT_JSON True
-        """
-        if self.config['EXPORT_JSON']:
-            check_dir(self.config['EXPORT_PATH'], 'json/')
 
-    def check_dir_csv(self):
-        """Create csv export directory on EXPORT_CSV True
+    def check_dir(self, config_name, export_path, folder):
+        """Check if the directory in the config variable exists
         """
-        if self.config['EXPORT_CSV']:
-            check_dir(self.config['EXPORT_PATH'], 'csv/')
-
-    def check_dir_logs(self):
-        """Create logs directory on LOGS True
-        """
-        if self.config['LOGS']:
-            check_dir(self.config['LOGS_PATH'], '')
+        if config_name:
+            cwd = os.getcwd()
+            export_dir = cwd+'/'+export_path+folder
+            if not os.path.exists(export_dir):
+                raise SettingsException('Directory missing ', export_dir)
 
     def validate_spider_settings(self):
         try:
@@ -89,11 +85,3 @@ class Arachne(Flask):
         """
         self.add_url_rule('/run-spider/<spider_name>', view_func=run_spider_endpoint)
         self.add_url_rule('/spiders/', view_func=list_spiders_endpoint)
-
-def check_dir(path, folder):
-    """Check if directory exists else raise exception
-    """ 
-    cwd = os.getcwd()
-    export_dir = cwd+'/'+path+folder
-    if not os.path.exists(export_dir):
-        raise SettingsException('Directory missing ', export_dir)
