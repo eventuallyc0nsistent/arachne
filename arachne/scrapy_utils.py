@@ -54,7 +54,6 @@ def get_spider_settings(flask_app_config):
     if flask_app_config['EXPORT_CSV']:
         pipelines['arachne.pipelines.ExportCSV'] = 200
     settings.set('ITEM_PIPELINES', pipelines)
-    
     return settings
 
 def start_crawler(spider_loc, flask_app_config):

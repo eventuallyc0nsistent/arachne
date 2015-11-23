@@ -20,7 +20,7 @@ class TestFlaskEndpoints(BaseFlaskApp):
     @patch('arachne.endpoints.start_crawler')
     def test_run_spider_endpoint(self, mock_start_crawler):
         resp = self.client.get('/run-spider/abc')
-        assert mock_start_crawler.called
+        self.assertTrue(mock_start_crawler.called)
         client_config = self.client.application.config
         mock_start_crawler.assert_called_once_with('spiders.abc.ABC.ABC', 
                                                    client_config)

@@ -11,7 +11,7 @@ class TestPipelines(TestCase):
 
     def test_cls_ExportData(self):
         cls = ExportData()
-        assert inspect.ismethod(cls.from_crawler)
+        self.assertTrue(inspect.ismethod(cls.from_crawler))
 
         with self.assertRaises(NotImplementedError):
             cls.spider_opened('test')
