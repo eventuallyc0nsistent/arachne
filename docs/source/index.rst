@@ -15,9 +15,17 @@ To install Arachne from pip use the command
 
 	pip install -i https://pypi.python.org/pypi/Arachne 
 
+Do I support django?
+--------------------
+Since I haven't had a lot of experience working with django I would not be able to comment on it but you can run this flask app on a different port and call your individual spiders from your django app.
+
 Getting started
 ---------------
 Learn more about getting start quickly in the `guide`_.
+
+Deploying to webserver
+----------------------
+Since this project is very much like a flask app please read the `official flask docs`_ to learn how to deploy to a webserver 
 
 .. toctree::
 	:hidden:
@@ -32,3 +40,4 @@ Learn more about getting start quickly in the `guide`_.
 .. _Scrapy: https://github.com/scrapy/scrapy/
 .. _guide: quickstart.html
 .. _The best code is no code at all: http://blog.codinghorror.com/the-best-code-is-no-code-at-all/
+.. _official flask docs: http://flask.pocoo.org/docs/0.10/quickstart/#deploying-to-a-web-server
