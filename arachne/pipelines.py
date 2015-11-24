@@ -22,7 +22,7 @@ class ExportData(object):
         file_to_save = self.files.pop(spider)
         file_to_save.close()
 
-    def process_item(self, item):
+    def process_item(self, item, spider):
         self.exporter.export_item(item)
         return item
 

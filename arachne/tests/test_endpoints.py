@@ -23,7 +23,8 @@ class TestFlaskEndpoints(BaseFlaskApp):
         self.assertTrue(mock_start_crawler.called)
         client_config = self.client.application.config
         mock_start_crawler.assert_called_once_with('spiders.abc.ABC.ABC', 
-                                                   client_config)
+                                                   client_config, 
+                                                   {'TELNETCONSOLE_PORT': 2020})
         self.assertEquals(json.loads(resp.data), {'status': '<abc> running'})
 
         resp = self.client.get('/run-spider/pqr')

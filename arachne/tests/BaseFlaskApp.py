@@ -18,9 +18,15 @@ class BaseFlaskApp(TestCase):
                 'endpoint': 'abc',
                 'location': 'spiders.abc.ABC',
                 'spider': 'ABC',
+                'scrapy_settings': {
+                    'TELNETCONSOLE_PORT': 2020
+                }
             }],
             'SECRET_KEY' : 'secret_test_key',
-            'TESTING': True
+            'TESTING': True,
+            'SCRAPY_SETTINGS': {
+                'TELNETCONSOLE_PORT': 3030
+            }
         }
         self.app = Arachne(__name__, settings=settings)
         self.client = self.app.test_client()

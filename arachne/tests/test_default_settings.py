@@ -15,3 +15,4 @@ class TestDefaultSettings(TestCase):
         self.assertFalse(default_settings.LOGS)
         self.assertEquals(default_settings.LOGS_PATH, 'logs/')
         self.assertTrue(default_settings.DEBUG)
+        self.assertTrue(isinstance(default_settings.SCRAPY_SETTINGS, dict))

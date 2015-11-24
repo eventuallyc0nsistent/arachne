@@ -16,3 +16,6 @@ LOGS_PATH = 'logs/'
 
 # DEBUG setting for spiders always true
 DEBUG = True
+
+# common settings for each spider
+SCRAPY_SETTINGS = {}

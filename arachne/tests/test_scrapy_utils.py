@@ -38,7 +38,8 @@ class TestScrapyUtils(TestCase):
         """
         return {
             'EXPORT_JSON': bool_json,
-            'EXPORT_CSV': bool_csv
+            'EXPORT_CSV': bool_csv, 
+            'SCRAPY_SETTINGS': {}
         }
 
     def get_item_export_pipeline(self, bool_json, bool_csv):
@@ -60,6 +61,6 @@ class TestScrapyUtils(TestCase):
         for item in bool_json_csv:
             test_flask_config = self.get_flask_export_config(item[0], item[1])
             pipelines = self.get_item_export_pipeline(item[0], item[1])
-            settings = get_spider_settings(test_flask_config)
+            settings = get_spider_settings(test_flask_config, {})
             self.assertIsInstance(settings, Settings)
             self.assertEquals(settings.get('ITEM_PIPELINES'), pipelines)

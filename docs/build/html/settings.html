@@ -46,8 +46,8 @@
 <p>You can set the global settings for <a class="reference external" href="https://github.com/mitsuhiko/flask/">Flask</a> and <a class="reference external" href="https://github.com/scrapy/scrapy/">Scrapy</a> through these variables:</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col width="12%" />
+<col width="88%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Field</th>
@@ -72,6 +72,9 @@
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">LOGS</span></code></td>
 <td>Turn ON(<code class="docutils literal"><span class="pre">True</span></code>) or off(<code class="docutils literal"><span class="pre">False</span></code>) HTTP logging for your flask app. Default set to <code class="docutils literal"><span class="pre">False</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">SCRAPY_SETTINGS</span></code></td>
+<td>Set <a class="reference external" href="http://doc.scrapy.org/en/0.24/topics/settings.html">scrapy settings</a> that you would like to set globally for each individual spider</td>
 </tr>
 </tbody>
 </table>
@@ -100,13 +103,13 @@
 <td>The <code class="docutils literal"><span class="pre">class</span></code> name of the <em>Spider</em>.</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">scrapy_settings</span></code></td>
-<td>[Coming Soon] This will let you override the individual settings for each spider in the scrapers. You can add scrapy pipelines or extensions through this variable.</td>
+<td>This will let you override the individual settings for each spider in the scrapers. You can add scrapy pipelines or extensions through this variable. This setting takes priority over your global <code class="docutils literal"><span class="pre">SCRAPY_SETTINGS</span></code> field</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">You can override all the <a class="reference external" href="https://github.com/mitsuhiko/flask/">Flask</a> settings from the <em>settings.py</em> file but for this relase you have limited settings allowed for <a class="reference external" href="https://github.com/scrapy/scrapy/">Scrapy</a>.</p>
+<p class="last">You can override all the <a class="reference external" href="https://github.com/mitsuhiko/flask/">Flask</a> settings from the <em>settings.py</em> file. View the list of <a class="reference external" href="http://doc.scrapy.org/en/0.24/topics/settings.html">scrapy settings</a> you can use.</p>
 </div>
 </div>
 </div>
@@ -138,6 +141,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="logging.html">Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
 
 

@@ -25,6 +25,7 @@ Learn more about getting start quickly in the `guide`_.
 	quickstart
 	settings
 	logging
+	changelog
 
 .. _Flask: https://github.com/mitsuhiko/flask/
 .. _Twisted:  https://twistedmatrix.com/trac/
