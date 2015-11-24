@@ -14,7 +14,7 @@ Installation
 ============
 You can install **Arachne** from pip 
 
-	pip install -i https://pypi.python.org/pypi Arachne
+	pip install -i https://pypi.python.org/pypi/Arachne
 
 
 Sample settings
