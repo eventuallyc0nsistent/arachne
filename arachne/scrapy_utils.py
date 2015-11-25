@@ -61,9 +61,11 @@ def get_spider_settings(flask_app_config, spider_scrapy_settings):
 
     # update spider global settings and personal settings
     all_settings.update(flask_app_config['SCRAPY_SETTINGS'])
-    all_settings.update(spider_scrapy_settings)
-    settings = Settings(all_settings)
 
+    if spider_scrapy_settings:
+        all_settings.update(spider_scrapy_settings)
+
+    settings = Settings(all_settings)
     return settings
 
 def start_crawler(spider_loc, flask_app_config, spider_scrapy_settings):
