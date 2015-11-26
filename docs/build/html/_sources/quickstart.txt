@@ -86,7 +86,6 @@ Now, run your application with the python command::
 	python app.py
 
 
-.. _link: settings.html
 
 Navigate to the URL http://localhost:8080/spiders/ to get a list of the spiders in your project. For the above example you should receive a response as::
 
@@ -95,3 +94,9 @@ Navigate to the URL http://localhost:8080/spiders/ to get a list of the spiders 
 	}
 
 To run the *dmoz* spider you can navigate to the URL http://localhost:8080/run-spider/dmoz.
+
+.. note::
+   You can also check the full quickstart project on github_.
+
+.. _link: settings.html
+.. _github: https://github.com/kirankoduru/arachne-demo
