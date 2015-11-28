@@ -93,6 +93,64 @@
 </pre></div>
 </div>
 </div>
+<div class="section" id="insert-item-to-database">
+<h2>Insert item to database<a class="headerlink" href="#insert-item-to-database" title="Permalink to this headline">¶</a></h2>
+<p>Scrapy allows each of your item to go through your <em>ITEM_PIPELINES</em>. We will use the <em>ITEM_PIPELINES</em> to insert each of the item scraped to our database using the <a class="reference external" href="http://www.sqlalchemy.org/">SQLAlchemy</a>. In a file called <em>models.py</em> paste the following content:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">declarative_base</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">scoped_session</span><span class="p">,</span> <span class="n">sessionmaker</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">Column</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">Integer</span><span class="p">,</span> <span class="n">DateTime</span>
+
+<span class="c"># db settings</span>
+<span class="n">dbuser</span> <span class="o">=</span> <span class="s">&#39;user&#39;</span> <span class="c">#DB username</span>
+<span class="n">dbpass</span> <span class="o">=</span> <span class="s">&#39;password&#39;</span> <span class="c">#DB password</span>
+<span class="n">dbhost</span> <span class="o">=</span> <span class="s">&#39;localhost&#39;</span> <span class="c">#DB host</span>
+<span class="n">dbname</span> <span class="o">=</span> <span class="s">&#39;scrapyspiders&#39;</span> <span class="c">#DB database name</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s">&quot;mysql://</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">@</span><span class="si">%s</span><span class="s">/</span><span class="si">%s</span><span class="s">?charset=utf8&amp;use_unicode=0&quot;</span>
+                                           <span class="o">%</span><span class="p">(</span><span class="n">dbuser</span><span class="p">,</span> <span class="n">dbpass</span><span class="p">,</span> <span class="n">dbhost</span><span class="p">,</span> <span class="n">dbname</span><span class="p">),</span>
+                                           <span class="n">echo</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                                           <span class="n">pool_recycle</span><span class="o">=</span><span class="mi">1800</span><span class="p">)</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">scoped_session</span><span class="p">(</span><span class="n">sessionmaker</span><span class="p">(</span><span class="n">autocommit</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                                                                 <span class="n">autoflush</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                                                                 <span class="n">bind</span><span class="o">=</span><span class="n">engine</span><span class="p">))</span>
+
+<span class="n">Base</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">AllData</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+        <span class="n">__tablename__</span> <span class="o">=</span> <span class="s">&#39;alldata&#39;</span>
+
+        <span class="nb">id</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">1000</span><span class="p">))</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">1000</span><span class="p">))</span>
+        <span class="n">desc</span> <span class="o">=</span> <span class="n">Column</span><span class="p">(</span><span class="n">String</span><span class="p">(</span><span class="mi">3000</span><span class="p">))</span>
+
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">title</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">desc</span> <span class="o">=</span> <span class="n">desc</span>
+
+        <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="k">return</span> <span class="s">&quot;&lt;AllData: id=&#39;</span><span class="si">%d</span><span class="s">&#39;, title=&#39;</span><span class="si">%s</span><span class="s">&#39;, url=&#39;</span><span class="si">%s</span><span class="s">&#39;, desc=&#39;</span><span class="si">%s</span><span class="s">&#39;&gt;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">desc</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Once you setup the SQLAlchemy <em>models</em> you need to add the following code to the <em>pipelines.py</em> file:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">models</span> <span class="kn">import</span> <span class="n">AllData</span><span class="p">,</span> <span class="n">db</span>
+
+<span class="k">class</span> <span class="nc">AddTablePipeline</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+        <span class="k">def</span> <span class="nf">process_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">spider</span><span class="p">):</span>
+
+                <span class="c"># create a new SQL Alchemy object and add to the db session</span>
+                <span class="n">record</span> <span class="o">=</span> <span class="n">AllData</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;unicode_escape&#39;</span><span class="p">),</span>
+                                                 <span class="n">url</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s">&#39;url&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                                                 <span class="n">desc</span><span class="o">=</span><span class="n">desc</span><span class="p">)</span>
+                <span class="n">db</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+                <span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+                <span class="k">return</span> <span class="n">item</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="settings">
 <h2>Settings<a class="headerlink" href="#settings" title="Permalink to this headline">¶</a></h2>
 <p>You need to specify the endpoint you would like to run your spider at in your <em>settings.py</em> file. To read more about the <em>SPIDER_SETTINGS</em> variables goto this <a class="reference external" href="settings.html">link</a>. It should look like:</p>
@@ -100,7 +158,12 @@
         <span class="p">{</span>
                 <span class="s">&#39;endpoint&#39;</span><span class="p">:</span> <span class="s">&#39;dmoz&#39;</span><span class="p">,</span>
                 <span class="s">&#39;location&#39;</span><span class="p">:</span> <span class="s">&#39;spiders.DmozSpider&#39;</span><span class="p">,</span>
-                <span class="s">&#39;spider&#39;</span><span class="p">:</span> <span class="s">&#39;DmozSpider&#39;</span>
+                <span class="s">&#39;spider&#39;</span><span class="p">:</span> <span class="s">&#39;DmozSpider&#39;</span><span class="p">,</span>
+                <span class="s">&#39;scrapy_settings&#39;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s">&#39;ITEM_PIPELINES&#39;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s">&#39;pipelines.AddTablePipeline&#39;</span><span class="p">:</span> <span class="mi">500</span>
+                        <span class="p">}</span>
+                <span class="p">}</span>
         <span class="p">}</span>
 <span class="p">]</span>
 </pre></div>
@@ -112,6 +175,8 @@
 <div class="highlight-python"><div class="highlight"><pre>.
 ├── app.py
 ├── settings.py
+├── models.py
+├── pipelines.py
 └── spiders
         ├── DmozSpider.py
         └── __init__.py # don&#39;t forget the __init__.py file
@@ -158,6 +223,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="">Quickstart</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#create-flask-app">Create flask app</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#spider">Spider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#insert-item-to-database">Insert item to database</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#settings">Settings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#directory-structure">Directory Structure</a></li>
 </ul>
@@ -183,7 +249,6 @@
 <script type="text/javascript">$('#searchbox').show(0);</script><h3>Useful Links</h3>
 <ul>
   <li><a href="http://github.com/kirankoduru/arachne/issues">Issue Tracker</a></li>
-  <li><a href="https://github.com/kirankoduru/arachne/blob/master/CHANGES.md">Changelog</a></li>
   <li><a href="https://tinyletter.com/kirankoduru">Subscribe to Newsletter</a></li>
 </ul>
         </div>
