@@ -6,3 +6,4 @@ venv/
 dist/
 build/
 *.egg-info/
+docs/build

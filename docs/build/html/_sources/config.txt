@@ -1,6 +1,0 @@
-.. _config:
-
-Configuration
-=============
-
-This is the configuration with using Arachne. 
