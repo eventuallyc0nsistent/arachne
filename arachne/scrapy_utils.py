@@ -6,7 +6,6 @@ from scrapy.crawler import Crawler
 from scrapy.utils.misc import load_object
 from scrapy.settings import Settings
 from scrapy.log import ScrapyFileLogObserver
-from redis import Redis
 
 def create_crawler_object(spider_, settings_):
     """
@@ -58,8 +57,13 @@ def get_spider_settings(flask_app_config, spider_scrapy_settings):
 
     # allow user to pass settings for each spider if needed
     all_settings['ITEM_PIPELINES'] = pipelines
+    if spider_scrapy_settings.get('ITEM_PIPELINES'):
+        all_settings['ITEM_PIPELINES'].update(
+            spider_scrapy_settings['ITEM_PIPELINES']
+        )
 
     # update spider global settings and personal settings
+    # TODO: [BUG FIX] for individual scrapy setting VS all spider settings 
     all_settings.update(flask_app_config['SCRAPY_SETTINGS'])
     if spider_scrapy_settings:
         all_settings.update(spider_scrapy_settings)

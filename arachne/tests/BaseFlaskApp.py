@@ -21,6 +21,10 @@ class BaseFlaskApp(TestCase):
                 'scrapy_settings': {
                     'TELNETCONSOLE_PORT': 2020
                 }
+            }, {
+                'endpoint': 'pqr',
+                'location': 'spiders.pqr.PQR',
+                'spider': 'PQR',
             }],
             'SECRET_KEY' : 'secret_test_key',
             'TESTING': True,

@@ -9,11 +9,12 @@ from arachne.tests.BaseFlaskApp import BaseFlaskApp
 class TestFlaskEndpoints(BaseFlaskApp):
 
     def test_list_spiders_endpoint(self):
-        resp = self.client.get('/spiders/')
+        resp = self.client.get('/')
         expected_resp = {
-            'endpoints': [
-                'abc'
-            ]
+            'endpoints': {
+                'abc': 'http://localhost/run-spider/abc',
+                'pqr': 'http://localhost/run-spider/pqr'
+            }
         }
         self.assertTrue(resp.data, expected_resp)
 
@@ -25,7 +26,11 @@ class TestFlaskEndpoints(BaseFlaskApp):
         mock_start_crawler.assert_called_once_with('spiders.abc.ABC.ABC', 
                                                    client_config, 
                                                    {'TELNETCONSOLE_PORT': 2020})
-        self.assertEquals(json.loads(resp.data), {'status': '<abc> running'})
 
-        resp = self.client.get('/run-spider/pqr')
+        self.assertEquals(json.loads(resp.data), 
+                          {'home': 'http://localhost/', 
+                           'status': 'running', 
+                           'spider_name': 'abc'})
+
+        resp = self.client.get('/run-spider/xyz')
         self.assertEquals(404, resp.status_code)
