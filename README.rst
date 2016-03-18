@@ -1,8 +1,8 @@
 =======
 Arachne
 =======
-.. image:: https://travis-ci.org/kirankoduru/Arachne.svg
-    :target: https://travis-ci.org/kirankoduru/Arachne
+.. image:: https://travis-ci.org/kirankoduru/arachne.svg
+    :target: https://travis-ci.org/kirankoduru/arachne
 
 .. image:: https://coveralls.io/repos/kirankoduru/arachne/badge.svg?branch=master&service=github
     :target: https://coveralls.io/github/kirankoduru/arachne?branch=master
@@ -14,7 +14,7 @@ Installation
 ============
 You can install **Arachne** from pip 
 
-	pip install -i https://pypi.python.org/pypi/Arachne
+	pip install Arachne
 
 
 Sample settings
