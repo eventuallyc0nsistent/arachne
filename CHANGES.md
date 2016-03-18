@@ -3,10 +3,14 @@ Changelog
 
 Here you will find the full list of changes between each Arachne release
 
+Version 0.4.0 (Mar 17th 2016)
+-----------------------------
+- Renamed the endpoints `/spiders` as `/` for more intuitive purposes - Closes #8
+- The `/run-spider` endpoint returns the name of spider and the status of the spider as running
+
 Version 0.3.1 (Nov 25th 2015)
 -----------------------------
 - [BUG FIX] Whoops! Forgot to test if there were individual spider `scrapy_settings` available
-
 
 Version 0.2.0 (Nov 23rd 2015)
 -----------------------------

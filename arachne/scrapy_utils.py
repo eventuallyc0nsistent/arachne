@@ -6,7 +6,7 @@ from scrapy.crawler import Crawler
 from scrapy.utils.misc import load_object
 from scrapy.settings import Settings
 from scrapy.log import ScrapyFileLogObserver
-
+from redis import Redis
 
 def create_crawler_object(spider_, settings_):
     """
@@ -46,7 +46,7 @@ def get_spider_settings(flask_app_config, spider_scrapy_settings):
     Returns:
         Scrapy settings class instance
 
-    .. vesion 0.3.0:
+    .. version 0.3.0:
        Allow settings for individual spiders and global settings
     """
     all_settings = {}
@@ -61,7 +61,6 @@ def get_spider_settings(flask_app_config, spider_scrapy_settings):
 
     # update spider global settings and personal settings
     all_settings.update(flask_app_config['SCRAPY_SETTINGS'])
-
     if spider_scrapy_settings:
         all_settings.update(spider_scrapy_settings)
 

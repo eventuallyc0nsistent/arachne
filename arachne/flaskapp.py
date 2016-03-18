@@ -84,4 +84,4 @@ class Arachne(Flask):
         that are available in the API
         """
         self.add_url_rule('/run-spider/<spider_name>', view_func=run_spider_endpoint)
-        self.add_url_rule('/spiders/', view_func=list_spiders_endpoint)
+        self.add_url_rule('/', view_func=list_spiders_endpoint)
