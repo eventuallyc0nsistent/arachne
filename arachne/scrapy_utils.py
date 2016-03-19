@@ -48,25 +48,21 @@ def get_spider_settings(flask_app_config, spider_scrapy_settings):
     .. version 0.3.0:
        Allow settings for individual spiders and global settings
     """
-    all_settings = {}
-    pipelines = {}
+    all_settings = flask_app_config['SCRAPY_SETTINGS']
+
+    if 'ITEM_PIPELINES' not in all_settings:
+        all_settings['ITEM_PIPELINES'] = {}
+
     if flask_app_config['EXPORT_JSON']:
-        pipelines['arachne.pipelines.ExportJSON'] = 100
+        all_settings['ITEM_PIPELINES']['arachne.pipelines.ExportJSON'] = 100
+
     if flask_app_config['EXPORT_CSV']:
-        pipelines['arachne.pipelines.ExportCSV'] = 200
+        all_settings['ITEM_PIPELINES']['arachne.pipelines.ExportCSV'] = 200
 
-    # allow user to pass settings for each spider if needed
-    all_settings['ITEM_PIPELINES'] = pipelines
-    if spider_scrapy_settings.get('ITEM_PIPELINES'):
-        all_settings['ITEM_PIPELINES'].update(
-            spider_scrapy_settings['ITEM_PIPELINES']
-        )
-
-    # update spider global settings and personal settings
-    # TODO: [BUG FIX] for individual scrapy setting VS all spider settings 
-    all_settings.update(flask_app_config['SCRAPY_SETTINGS'])
-    if spider_scrapy_settings:
-        all_settings.update(spider_scrapy_settings)
+    # spider scrapy settings has priority over global scrapy settings
+    for setting, _ in all_settings.items():
+        if setting in spider_scrapy_settings:
+            all_settings[setting].update(spider_scrapy_settings[setting])
 
     settings = Settings(all_settings)
     return settings
