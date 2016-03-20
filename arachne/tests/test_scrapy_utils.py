@@ -17,9 +17,9 @@ class TestScrapyUtils(TestCase):
         self.assertIsInstance(crwlr, Crawler)
 
     @patch('arachne.scrapy_utils.Crawler')
-    def test_create_crawler_mock(self, mock_Crawler):
+    def test_create_crawler_mock(self, mock_crawler):
         create_crawler_object(self.spider, self.settings)
-        mock_Crawler.assert_called_with(self.settings)
+        mock_crawler.assert_called_with(self.settings)
 
     @patch('arachne.scrapy_utils.logfile')
     @patch('arachne.scrapy_utils.tlog')
@@ -29,9 +29,11 @@ class TestScrapyUtils(TestCase):
         mock_twisted_log.startLogging.assert_called_with(sys.stdout)
 
         start_logger(False)
-        YmD_date = datetime.now().strftime('%Y-%m-%d.scrapy.log')
+        y_m_d_date = datetime.now().strftime('%Y-%m-%d.scrapy.log')
         self.assertTrue(mock_twisted_logfile.is_called)
-        mock_twisted_logfile.LogFile.assert_called_with(YmD_date, 'logs/', maxRotatedFiles=100)
+        mock_twisted_logfile.LogFile.assert_called_with(y_m_d_date, 
+                                                        'logs/', 
+                                                        maxRotatedFiles=100)
 
     def get_flask_export_config(self, bool_json, bool_csv):
         """Return dict with the boolean set for EXPORT params
@@ -64,3 +66,24 @@ class TestScrapyUtils(TestCase):
             settings = get_spider_settings(test_flask_config, {})
             self.assertIsInstance(settings, Settings)
             self.assertEquals(settings.get('ITEM_PIPELINES'), pipelines)
+
+            # test if global settings are appeneded to spider settings 
+            test_flask_config['SCRAPY_SETTINGS']['ITEM_PIPELINES'] = {
+                'apple': 100,
+                'batman': 200
+            }
+            pipelines.update(test_flask_config['SCRAPY_SETTINGS']['ITEM_PIPELINES'])
+            settings = get_spider_settings(test_flask_config, {})
+            self.assertEquals(settings['ITEM_PIPELINES'], pipelines)
+
+            # test if spider settings have priority over scrapy settings
+            test_flask_config = self.get_flask_export_config(item[0], item[1])
+            pipelines = self.get_item_export_pipeline(item[0], item[1])
+            spider_settings = {
+                'ITEM_PIPELINES': {
+                    'arachne.pipelines.ExportJSON': 300,
+                    'arachne.pipelines.ExportCSV': 400,
+                }
+            }
+            settings = get_spider_settings(test_flask_config, spider_settings)
+            self.assertEquals(settings.get('ITEM_PIPELINES'), spider_settings['ITEM_PIPELINES'])
