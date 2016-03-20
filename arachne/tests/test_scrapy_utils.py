@@ -4,7 +4,8 @@ from datetime import datetime
 from mock import Mock, patch
 from scrapy.crawler import Crawler
 from scrapy.settings import Settings
-from arachne.scrapy_utils import create_crawler_object, start_logger, get_spider_settings
+from arachne.scrapy_utils import (create_crawler_object, start_logger,
+                                  get_spider_settings, start_crawler)
 
 class TestScrapyUtils(TestCase):
 
@@ -39,6 +40,7 @@ class TestScrapyUtils(TestCase):
         """Return dict with the boolean set for EXPORT params
         """
         return {
+            'DEBUG': True,
             'EXPORT_JSON': bool_json,
             'EXPORT_CSV': bool_csv, 
             'SCRAPY_SETTINGS': {}
@@ -87,3 +89,18 @@ class TestScrapyUtils(TestCase):
             }
             settings = get_spider_settings(test_flask_config, spider_settings)
             self.assertEquals(settings.get('ITEM_PIPELINES'), spider_settings['ITEM_PIPELINES'])
+
+    @patch('arachne.scrapy_utils.Crawler')
+    @patch('arachne.scrapy_utils.load_object')
+    @patch('arachne.scrapy_utils.tlog')
+    def test_start_crawler(self, tlog, load_object, crwlr):
+        spider_loc = 'ABC.ABC'
+        flask_app_config = self.get_flask_export_config(True, True)
+        spider_scrapy_settings = {
+            'ITEM_PIPELINES': self.get_item_export_pipeline(False, True)
+        }
+        start_crawler(spider_loc, flask_app_config, spider_scrapy_settings)
+
+        assert tlog.startLogging.called
+        load_object.assert_called_with(spider_loc)
+
