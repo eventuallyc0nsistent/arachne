@@ -65,9 +65,11 @@ class TestFlaskApp(TestCase):
     def test_settings_not_abs_path(self):
         """Check if the config obj is updated with default_settings when it is 
         passed as a file path thats not absolute
+
+        FIXME: This test only passes in travisCI.
         """
         path = '/arachne/tests/test_settings.py'
-        test_app = self.create_app(settings='../..' + path)
+        test_app = self.create_app(settings='Arachne' + path)
 
         # load config from pyfile
         flask_app = Flask(__name__)
