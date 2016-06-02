@@ -46,10 +46,8 @@ class Arachne(Flask):
             if os.path.isabs(self.settings):
                 pyfile = self.settings
             else:
-                print os.getcwd()
                 abspath = os.path.abspath(os.path.dirname(sys.argv[0]))
                 pyfile = os.path.join(abspath, self.settings)
-                print pyfile
             try:
                 self.config.from_pyfile(pyfile)
             except IOError:
