@@ -1,18 +1,22 @@
 import os
 import sys
 from flask import Flask
+from scrapy.crawler import CrawlerProcess
 
 from arachne.exceptions import SettingsException
 from arachne.endpoints import list_spiders_endpoint, run_spider_endpoint
 
 class Arachne(Flask):
 
-    def __init__(self, import_name=__package__, 
+    def __init__(self, import_name=__package__,
                  settings='settings.py', **kwargs):
         """Initialize the flask app with the settings variable. Load config
-        from the settings variable and test if the all the 
+        from the settings variable and test if the all the
         directories(for exports & logs) exists. Finally bind the endpoints for
         the flask application to control the spiders
+
+        .. version 0.5.0:
+            Initialize Flask config with `CRAWLER_PROCESS` object
         """
         super(Arachne, self).__init__(import_name, **kwargs)
         self.settings = settings
@@ -21,7 +25,7 @@ class Arachne(Flask):
         self.validate_spider_settings()
 
         # create directories
-        self.check_dir(self.config['EXPORT_JSON'], 
+        self.check_dir(self.config['EXPORT_JSON'],
                        self.config['EXPORT_PATH'],
                        'json/')
         self.check_dir(self.config['EXPORT_CSV'],
@@ -29,6 +33,7 @@ class Arachne(Flask):
                        'json/')
         self.check_dir(self.config['LOGS'], self.config['LOGS_PATH'], '')
 
+        self._init_crawler_process()
         self._init_url_rules()
 
     def run(self, host=None, port=None, debug=None, **options):
@@ -37,7 +42,7 @@ class Arachne(Flask):
     def load_config(self):
         """Default settings are loaded first and then overwritten from
         personal `settings.py` file
-        """ 
+        """
         self.config.from_object('arachne.default_settings')
 
         if isinstance(self.settings, dict):
@@ -60,7 +65,6 @@ class Arachne(Flask):
         envvar = 'ARACHNE_SETTINGS'
         if os.environ.get(envvar):
             self.config.from_envvar(envvar)
-
 
     def check_dir(self, config_name, export_path, folder):
         """Check if the directory in the config variable exists
@@ -85,3 +89,7 @@ class Arachne(Flask):
         """
         self.add_url_rule('/run-spider/<spider_name>', view_func=run_spider_endpoint)
         self.add_url_rule('/', view_func=list_spiders_endpoint)
+
+
+    def _init_crawler_process(self):
+        self.config['CRAWLER_PROCESS'] = CrawlerProcess()

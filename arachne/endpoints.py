@@ -1,9 +1,10 @@
 from flask import current_app as app, jsonify, abort, request
 from arachne.scrapy_utils import start_crawler
 
+
 def list_spiders_endpoint():
     """It returns a list of spiders available in the SPIDER_SETTINGS dict
-    
+
     .. version 0.4.0:
         endpoint returns the spidername and endpoint to run the spider from
     """
@@ -12,10 +13,11 @@ def list_spiders_endpoint():
         spiders[item['endpoint']] = request.url_root + 'run-spider/' + item['endpoint']
     return jsonify(endpoints=spiders)
 
+
 def run_spider_endpoint(spider_name):
     """Search for the spider_name in the SPIDER_SETTINGS dict and
     start running the spider with the Scrapy API
-    
+
     .. version 0.4.0:
         endpoint returns the `status` as `running` and a way to go back to `home` endpoint
     """

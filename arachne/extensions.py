@@ -1,18 +1,20 @@
 from scrapy import signals
-from scrapy.contrib.exporter import CsvItemExporter, JsonItemExporter
+from scrapy.exporters import CsvItemExporter, JsonItemExporter
 
 
 class ExportData(object):
+
     def __init__(self):
         self.files = {}
         self.exporter = None
 
     @classmethod
     def from_crawler(cls, crawler):
-        pipeline = cls()
-        crawler.signals.connect(pipeline.spider_opened, signals.spider_opened)
-        crawler.signals.connect(pipeline.spider_closed, signals.spider_closed)
-        return pipeline
+        ext = cls()
+        crawler.signals.connect(ext.spider_opened, signals.spider_opened)
+        crawler.signals.connect(ext.spider_closed, signals.spider_closed)
+        crawler.signals.connect(ext.item_scraped, signal=signals.item_scraped)
+        return ext
 
     def spider_opened(self, spider):
         raise NotImplementedError
@@ -22,7 +24,7 @@ class ExportData(object):
         file_to_save = self.files.pop(spider)
         file_to_save.close()
 
-    def process_item(self, item, spider):
+    def item_scraped(self, item, spider):
         self.exporter.export_item(item)
         return item
 
