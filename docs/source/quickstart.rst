@@ -150,7 +150,7 @@ Now, run your application with the python command::
 
 
 
-Navigate to the URL http://localhost:8080/spiders/ to get a list of the spiders in your project. For the above example you should receive a response as::
+Navigate to the URL http://localhost:8080/ to get a list of the spiders in your project. For the above example you should receive a response as::
 
     {
         spiders:['dmoz']
