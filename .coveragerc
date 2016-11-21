@@ -1,0 +1,6 @@
+[run]
+include=arachne/*
+omit=
+    venv/*
+    tests/*
+    .tox/*

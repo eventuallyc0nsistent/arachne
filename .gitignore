@@ -7,5 +7,4 @@ dist/
 build/
 *.egg-info/
 docs/build
-.coveragerc
 .tox/
