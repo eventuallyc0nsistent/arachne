@@ -5,11 +5,11 @@ Here you will find the full list of changes between each Arachne release
 
 0.5.0 (Nov 20th 2016)
 ---------------------
-- Add support for Scrapy 1.0 (:issue:`4`)
+- Add support for Scrapy 1.0 (FIX:`4`_)
 
 0.4.0 (Mar 17th 2016)
 ---------------------
-- Renamed the endpoints `/spiders` as `/` for more intuitive purposes - Closes [#8](https://github.com/kirankoduru/arachne/issues/8)
+- Renamed the endpoints `/spiders` as `/` for more intuitive purposes - (FIX:`8`_)
 - The `/run-spider` endpoint returns the name of spider and the status of the spider as running
 
 0.3.1 (Nov 25th 2015)
@@ -30,3 +30,6 @@ Here you will find the full list of changes between each Arachne release
 ---------------------
 
 - First public preview release
+
+.. _4: https://github.com/kirankoduru/arachne/issues/4
+.. _8: https://github.com/kirankoduru/arachne/issues/8
