@@ -5,7 +5,7 @@ import inspect
 from unittest import TestCase
 from scrapy import signals, Field, Item
 from mock import patch, mock_open, Mock, call
-from arachne.pipelines import ExportCSV, ExportData, ExportJSON
+from arachne.extensions import ExportCSV, ExportData, ExportJSON
 from scrapy.contrib.exporter import CsvItemExporter, JsonItemExporter
 
 class ScrapyItem(Item):
@@ -46,7 +46,7 @@ class TestPipelines(TestCase):
             spider = Mock()
             spider.name = 'abc'
 
-            with patch('arachne.pipelines.open', mock_open_func):
+            with patch('arachne.extensions.open', mock_open_func):
                 cls.spider_opened(spider)
                 path = 'exports/%s/abc.%s' % (test_cls['file_type'], 
                                               test_cls['file_type'])
@@ -59,5 +59,5 @@ class TestPipelines(TestCase):
 
                 # test exporter.export_item
                 item = ScrapyItem()
-                result = cls.process_item(item, spider)
+                result = cls.item_scraped(item, spider)
                 self.assertEquals(item, result)

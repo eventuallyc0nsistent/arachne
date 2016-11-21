@@ -8,6 +8,7 @@ if SCRAPY_VERSION <= (1, 0, 0):
     from datetime import datetime
     from twisted.python import logfile, log as tlog
     from scrapy.crawler import Crawler
+    from scrapy.log import ScrapyFileLogObserver
 
 def create_crawler_object(spider_, settings_):
     """
