@@ -9,7 +9,7 @@ install_requires = [
 
 setup(
     name='Arachne',
-    version='0.4.0',
+    version='0.5.0',
     author='Kiran Koduru',
     author_email='kiranrkoduru@gmail.com',
     packages=find_packages(),

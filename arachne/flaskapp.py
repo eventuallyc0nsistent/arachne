@@ -1,7 +1,7 @@
 import os
 import sys
 from flask import Flask
-from scrapy.crawler import CrawlerProcess
+from scrapy import version_info as SCRAPY_VERSION
 
 from arachne.exceptions import SettingsException
 from arachne.endpoints import list_spiders_endpoint, run_spider_endpoint
@@ -16,7 +16,8 @@ class Arachne(Flask):
         the flask application to control the spiders
 
         .. version 0.5.0:
-            Initialize Flask config with `CRAWLER_PROCESS` object
+            Initialize Flask config with `CRAWLER_PROCESS` object if scrapy
+            version is 1.0.0 or greater
         """
         super(Arachne, self).__init__(import_name, **kwargs)
         self.settings = settings
@@ -32,8 +33,13 @@ class Arachne(Flask):
                        self.config['EXPORT_PATH'],
                        'json/')
         self.check_dir(self.config['LOGS'], self.config['LOGS_PATH'], '')
+        
+        # from scrapy's version_info initialize Flask app
+        # for version before 1.0.0 you don't need to init crawler_process
+        if SCRAPY_VERSION >= (1, 0, 0):
+            self._init_crawler_process()
 
-        self._init_crawler_process()
+        # initialize endpoints for API
         self._init_url_rules()
 
     def run(self, host=None, port=None, debug=None, **options):
@@ -92,4 +98,5 @@ class Arachne(Flask):
 
 
     def _init_crawler_process(self):
+        from scrapy.crawler import CrawlerProcess
         self.config['CRAWLER_PROCESS'] = CrawlerProcess()

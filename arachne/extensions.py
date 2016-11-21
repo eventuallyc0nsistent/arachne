@@ -1,6 +1,10 @@
 from scrapy import signals
-from scrapy.exporters import CsvItemExporter, JsonItemExporter
+from scrapy import version_info as SCRAPY_VERSION
 
+if SCRAPY_VERSION <= (1, 0, 0):
+    from scrapy.contrib.exporter import CsvItemExporter, JsonItemExporter
+else:
+    from scrapy.exporters import CsvItemExporter, JsonItemExporter
 
 class ExportData(object):
 
@@ -13,7 +17,7 @@ class ExportData(object):
         ext = cls()
         crawler.signals.connect(ext.spider_opened, signals.spider_opened)
         crawler.signals.connect(ext.spider_closed, signals.spider_closed)
-        crawler.signals.connect(ext.item_scraped, signal=signals.item_scraped)
+        crawler.signals.connect(ext.item_scraped, signals.item_scraped)
         return ext
 
     def spider_opened(self, spider):
