@@ -6,6 +6,4 @@ env:
  - TOXENV=scrapy-0.24
 script: tox
 after_success: coveralls
-cache:
-  directories:
-    - $HOME/.cache/pip
+
