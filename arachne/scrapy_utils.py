@@ -51,7 +51,8 @@ def get_spider_settings(flask_app_config, spider_scrapy_settings):
     .. version 0.3.0:
        Allow settings for individual spiders and global settings
     """
-    all_settings = flask_app_config['SCRAPY_SETTINGS']
+    all_settings = flask_app_config
+    default_scrapy_settings = flask_app_config['SCRAPY_SETTINGS']
 
     if 'EXTENSIONS' not in all_settings:
         all_settings['EXTENSIONS'] = {}
@@ -65,7 +66,7 @@ def get_spider_settings(flask_app_config, spider_scrapy_settings):
     # spider scrapy settings has priority over global scrapy settings
     if spider_scrapy_settings:
         for setting, _ in spider_scrapy_settings.items():
-            if setting in all_settings:
+            if setting in default_scrapy_settings:
                 all_settings[setting].update(spider_scrapy_settings[setting])
             else:
                 all_settings[setting] = spider_scrapy_settings[setting]
