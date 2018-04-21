@@ -51,7 +51,10 @@ def get_spider_settings(flask_app_config, spider_scrapy_settings):
     .. version 0.3.0:
        Allow settings for individual spiders and global settings
     """
-    all_settings = flask_app_config['SCRAPY_SETTINGS']
+    all_settings = flask_app_config
+
+    # Merge the SCRAPY_SETTINGS to the rest of settings available in default_settings.py
+    all_settings.update(flask_app_config['SCRAPY_SETTINGS'])
 
     if 'EXTENSIONS' not in all_settings:
         all_settings['EXTENSIONS'] = {}
@@ -63,9 +66,9 @@ def get_spider_settings(flask_app_config, spider_scrapy_settings):
         all_settings['EXTENSIONS']['arachne.extensions.ExportCSV'] = 200
 
     # spider scrapy settings has priority over global scrapy settings
-    for setting, _ in all_settings.items():
-        if spider_scrapy_settings and setting in spider_scrapy_settings:
-            all_settings[setting].update(spider_scrapy_settings[setting])
+    # This updates the all_settings dict with values from spider_scrapy_settings, if provided.
+    if spider_scrapy_settings:
+        all_settings.update(spider_scrapy_settings)
 
     settings = Settings(all_settings)
     return settings
